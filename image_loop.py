@@ -1,9 +1,9 @@
 import os, time, pickle
-
-DEBUG_MODE = True
+from subprocess import call
+DEBUG_MODE = False
 IMAGES_DIR = 'images'
 MAX_TIME = 300
-SLEEP_TIME = 5
+SLEEP_TIME = 10
 LOG_FILE = 'donnadrive.log'
 
 LOG = {}
@@ -26,6 +26,11 @@ def save_log():
 def show_image(file, Debug = False):
 	if Debug:
 		print('Showing image {0}'.format(file))
+	else:
+		try:
+			call(["fbi", "--blend 1 --noverbose -T 1 -a '{0}' 2> /dev/null".format(file)])
+		except OSError as e:
+			print('Could not call fbi')
 
 	if file in LOG:
 		LOG[file] += 1
