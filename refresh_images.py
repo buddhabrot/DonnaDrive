@@ -111,6 +111,7 @@ def main():
             if not os.path.isfile(file_location):
                 tfd = open(tmp_file_location, 'wb')
                 download_file(service, id, tfd)
+                tfd.close()
                 rotate_image(tmp_file_location)
                 os.rename(tmp_file_location, file_location)
 
