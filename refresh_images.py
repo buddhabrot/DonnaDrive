@@ -2,6 +2,7 @@ from __future__ import print_function
 import httplib2
 import os
 import time
+from PIL import Image, ExifTags
 
 from apiclient import discovery
 from apiclient import errors
@@ -50,6 +51,27 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
+def rotate_image(file):
+    try:
+        image = Image.open(file)
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation]=='Orientation':
+                break
+        exif=dict(image._getexif().items())
+
+        if exif[orientation] == 3:
+            image=image.rotate(180, expand=True)
+        elif exif[orientation] == 6:
+            image=image.rotate(270, expand=True)
+        elif exif[orientation] == 8:
+            image=image.rotate(90, expand=True)
+        image.save(file)
+        image.close()
+
+    except (AttributeError, KeyError, IndexError):
+        # cases: image don't have getexif
+        pass
+
 def list_images():
 	path = IMAGES_DIR
 	name_list = os.listdir(path)
@@ -89,6 +111,7 @@ def main():
             if not os.path.isfile(file_location):
                 tfd = open(tmp_file_location, 'wb')
                 download_file(service, id, tfd)
+                rotate_image(tmp_file_location)
                 os.rename(tmp_file_location, file_location)
 
      # keep only the last N_IMAGES
