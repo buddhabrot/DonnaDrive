@@ -28,6 +28,7 @@ def show_image(file, Debug = False):
 		print('Showing image {0}'.format(file))
 	else:
 		try:
+			os.system("sudo killall fbi")
 			os.system("sudo fbi --blend 1 --noverbose -T 1 -a '{0}' 2> /dev/null".format(file))
 		except OSError as e:
 			print('Could not call fbi')
