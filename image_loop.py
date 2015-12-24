@@ -2,7 +2,7 @@ import os, time, pickle
 from subprocess import call
 DEBUG_MODE = False
 IMAGES_DIR = os.path.dirname(os.path.realpath(__file__)) + '/images'
-MAX_TIME = 300
+MAX_TIME = 280
 SLEEP_TIME = 10
 LOG_FILE = os.path.dirname(os.path.realpath(__file__)) + '/donnadrive.log'
 
