@@ -20,7 +20,7 @@ ROTATION_SIZE = 3
 SCOPES = 'https://www.googleapis.com/auth/drive.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Drive API Python Quickstart'
-IMAGES_DIR = 'images'
+IMAGES_DIR = os.path.dirname(os.path.realpath(__file__)) + '/images'
 N_IMAGES = 20
 
 
