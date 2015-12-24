@@ -112,7 +112,11 @@ def main():
                 tfd = open(tmp_file_location, 'wb')
                 download_file(service, id, tfd)
                 tfd.close()
-                rotate_image(tmp_file_location)
+                try:
+                    rotate_image(tmp_file_location)
+                except IOError as error:
+                    os.unlink(tmp_file_location)
+                    continue
                 os.rename(tmp_file_location, file_location)
 
      # keep only the last N_IMAGES
