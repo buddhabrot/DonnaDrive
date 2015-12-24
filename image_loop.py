@@ -28,6 +28,7 @@ def show_image(file, Debug = False):
 		print('Showing image {0}'.format(file))
 	else:
 		try:
+			os.system('clear > /dev/tty1')
 			os.system("sudo killall fbi")
 			os.system("sudo fbi --blend 1 --noverbose -T 1 -a '{0}' 2> /dev/null".format(file))
 		except OSError as e:
@@ -36,7 +37,7 @@ def show_image(file, Debug = False):
 	if file in LOG:
 		LOG[file] += 1
 	else:
-		LOG[file] = 1
+		LOG[file] = min(LOG.itervalues()) # set to MIN to keep from rotating new files
 	save_log()
 
 def list_images():

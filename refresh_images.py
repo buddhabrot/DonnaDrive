@@ -22,7 +22,7 @@ SCOPES = 'https://www.googleapis.com/auth/drive.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Drive API Python Quickstart'
 IMAGES_DIR = 'images'
-N_IMAGES = 20
+N_IMAGES = 50
 
 
 def get_credentials():
