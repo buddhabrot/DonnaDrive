@@ -3,3 +3,5 @@ images
 client_id.json 
 client_secret.json 
 creds.json
+.log
+.idea
