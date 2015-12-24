@@ -20,7 +20,7 @@ ROTATION_SIZE = 3
 SCOPES = 'https://www.googleapis.com/auth/drive.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Drive API Python Quickstart'
-IMAGES_DIR = os.path.dirname(os.path.realpath(__file__)) + '/images'
+IMAGES_DIR = 'images'
 N_IMAGES = 20
 
 
@@ -33,7 +33,7 @@ def get_credentials():
     Returns:
         Credentials, the obtained credential.
     """
-    credential_dir = '.'
+    credential_dir = os.path.dirname(os.path.realpath(__file__))
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
     credential_path = os.path.join(credential_dir, 'creds.json')
@@ -60,7 +60,7 @@ def list_images():
 
 def main():
     try:
-        DONNA_FOLDER = open('donna_folder.id').readline().rstrip()
+        DONNA_FOLDER = open(os.path.dirname(os.path.realpath(__file__)) + '/' + 'donna_folder.id').readline().rstrip()
     except IOError as e:
         print('Could not find donna folder id')
         exit(1)
@@ -83,7 +83,7 @@ def main():
         print('Files to download:')
         for item in items:
             id = item['id']
-            file_location = IMAGES_DIR + '/' + id
+            file_location = os.path.dirname(os.path.realpath(__file__)) + '/' + IMAGES_DIR + '/' + id
             tmp_file_location = '/tmp/' + id + str(time.time())
 
             if not os.path.isfile(file_location):
