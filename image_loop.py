@@ -57,6 +57,10 @@ def main():
 				file_to_show = image
 				break
 
+		for key in LOG.keys():
+			if not os.path.isfile(key):
+				del LOG[key]
+				
 		if not file_to_show:
 			file_to_show = min(LOG, key=LOG.get)
 
