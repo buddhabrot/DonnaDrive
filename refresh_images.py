@@ -73,10 +73,10 @@ def rotate_image(file):
         pass
 
 def list_images():
-	path = IMAGES_DIR
+	path = os.path.dirname(os.path.realpath(__file__)) + '/' + IMAGES_DIR
 	name_list = os.listdir(path)
 	full_list = [os.path.join(path,i) for i in name_list]
-	time_sorted_list = sorted(full_list, key=os.path.getmtime)
+	time_sorted_list = sorted(full_list, key=os.path.getmtime, reverse=True)
 
 	return time_sorted_list
 
@@ -97,7 +97,7 @@ def main():
     service = discovery.build('drive', 'v2', http=http)
 
     results = service.children().list(folderId=DONNA_FOLDER, orderBy='modifiedDate desc', maxResults=N_IMAGES).execute()
-    #download = download_file(service, '1OjZ0i1Qnk1Kwwc-OyTMNO3GSuNGF_G54dw', fd)
+
     items = results.get('items', [])
     if not items:
         print('No files found.')
