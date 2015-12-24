@@ -1,7 +1,7 @@
 from __future__ import print_function
 import httplib2
 import os
-
+import time
 
 from apiclient import discovery
 from apiclient import errors
@@ -84,9 +84,12 @@ def main():
         for item in items:
             id = item['id']
             file_location = IMAGES_DIR + '/' + id
+            tmp_file_location = '/tmp/' + id + str(time.time())
+
             if not os.path.isfile(file_location):
-                fd = open(file_location, 'wb')
-                download_file(service, id, fd)
+                tfd = open(tmp_file_location, 'wb')
+                download_file(service, id, tfd)
+                os.rename(tmp_file_location, file_location)
 
      # keep only the last N_IMAGES
     images = list_images()
@@ -105,6 +108,11 @@ def download_file(service, file_id, local_fd):
     local_fd: io.Base or file object, the stream that the Drive file's
         contents will be written to.
     """
+    file = service.files().get(fileId=file_id).execute()
+
+    if (file['mimeType'] == 'video/mp4'):
+        return
+
     request = service.files().get_media(fileId=file_id)
     media_request = http.MediaIoBaseDownload(local_fd, request)
 
