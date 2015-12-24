@@ -20,6 +20,8 @@ ROTATION_SIZE = 3
 SCOPES = 'https://www.googleapis.com/auth/drive.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Drive API Python Quickstart'
+IMAGES_DIR = 'images'
+N_IMAGES = 20
 
 
 def get_credentials():
@@ -48,6 +50,14 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
+def list_images():
+	path = IMAGES_DIR
+	name_list = os.listdir(path)
+	full_list = [os.path.join(path,i) for i in name_list]
+	time_sorted_list = sorted(full_list, key=os.path.getmtime)
+
+	return time_sorted_list
+
 def main():
     try:
         DONNA_FOLDER = open('donna_folder.id').readline().rstrip()
@@ -64,7 +74,7 @@ def main():
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('drive', 'v2', http=http)
 
-    results = service.children().list(folderId=DONNA_FOLDER, orderBy='modifiedDate desc', maxResults=10).execute()
+    results = service.children().list(folderId=DONNA_FOLDER, orderBy='modifiedDate desc', maxResults=N_IMAGES).execute()
     #download = download_file(service, '1OjZ0i1Qnk1Kwwc-OyTMNO3GSuNGF_G54dw', fd)
     items = results.get('items', [])
     if not items:
@@ -73,10 +83,18 @@ def main():
         print('Files to download:')
         for item in items:
             id = item['id']
-            file_location = 'images/' + id
+            file_location = IMAGES_DIR + '/' + id
             if not os.path.isfile(file_location):
                 fd = open(file_location, 'wb')
                 download_file(service, id, fd)
+
+     # keep only the last N_IMAGES
+    images = list_images()
+    if len(images) > N_IMAGES:
+        for image in images[N_IMAGES:]:
+            os.unlink(image)
+            print("Removed {0}".format(image))
+
 
 def download_file(service, file_id, local_fd):
     """Download a Drive file's content to the local filesystem.
