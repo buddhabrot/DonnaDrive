@@ -53,7 +53,7 @@ def get_credentials():
 
 def rotate_image(file):
     try:
-        image = Image.open(file, "wb")
+        image = Image.open(file)
         for orientation in ExifTags.TAGS.keys():
             if ExifTags.TAGS[orientation]=='Orientation':
                 break
